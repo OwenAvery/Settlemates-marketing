@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Settlemates — Negotiation Math, Fast — Coming Soon</title>
+  <style>
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Georgia', serif;
+      color: #1a1a2e;
+      background: #ffffff;
+      line-height: 1.7;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; }
+
+    /* ── Utility ── */
+    .container { max-width: 1080px; margin: 0 auto; padding: 0 28px; }
+    .btn {
+      display: inline-block;
+      padding: 14px 32px;
+      border-radius: 4px;
+      font-family: 'Arial', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: opacity 0.2s, background 0.2s;
+    }
+    .btn-primary {
+      background: #6b9a52;
+      color: #ffffff;
+      border: none;
+    }
+    .btn-primary:hover { opacity: 0.88; }
+    .btn-outline {
+      background: transparent;
+      color: #6b9a52;
+      border: 2px solid #6b9a52;
+    }
+    .btn-outline:hover { background: #6b9a52; color: #fff; }
+    .section-label {
+      font-family: 'Arial', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #6b9a52;
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-size: clamp(26px, 4vw, 38px);
+      font-weight: normal;
+      color: #1a1a2e;
+      line-height: 1.25;
+      margin-bottom: 18px;
+    }
+    .section-subtitle {
+      font-family: 'Arial', sans-serif;
+      font-size: 17px;
+      color: #4a4a6a;
+      max-width: 640px;
+      line-height: 1.7;
+    }
+
+    /* ── Nav ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #1a1a2e;
+      padding: 18px 0;
+    }
+    nav .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      align-items: center;
+      list-style: none;
+      font-family: 'Arial', sans-serif;
+      font-size: 14px;
+    }
+    .nav-links a { color: #c8cae0; transition: color 0.2s; }
+    .nav-links a:hover { color: #ffffff; }
+    .nav-links .nav-cta .btn { padding: 10px 22px; font-size: 14px; }
+
+    /* ── Hero ── */
+    .hero {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
+      padding: 100px 0 90px;
+      text-align: center;
+    }
+    .hero-eyebrow {
+      font-family: 'Arial', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #6b9a52;
+      margin-bottom: 20px;
+    }
+    .hero h1 {
+      font-size: clamp(38px, 6vw, 66px);
+      font-weight: normal;
+      color: #ffffff;
+      line-height: 1.12;
+      margin-bottom: 24px;
+    }
+    .hero h1 em {
+      font-style: italic;
+      color: #6b9a52;
+    }
+    .hero-sub {
+      font-family: 'Arial', sans-serif;
+      font-size: 19px;
+      color: #b0b4cc;
+      max-width: 620px;
+      margin: 0 auto 40px;
+      line-height: 1.65;
+    }
+    .hero-cta {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .hero-note {
+      margin-top: 18px;
+      font-family: 'Arial', sans-serif;
+      font-size: 13px;
+      color: #6a6e88;
+    }
+
+    /* ── Coming Soon Badge in Hero ── */
+    .coming-soon-badge {
+      display: inline-block;
+      background: rgba(107, 154, 82, 0.15);
+      border: 1px solid rgba(107, 154, 82, 0.4);
+      color: #8dc870;
+      font-family: 'Arial', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 7px 18px;
+      border-radius: 20px;
+      margin-bottom: 28px;
+    }
+
+    /* ── Proof Bar ── */
+    .proof-bar {
+      background: #f4f1ea;
+      padding: 18px 0;
+      text-align: center;
+      font-family: 'Arial', sans-serif;
+      font-size: 14px;
+      color: #6a6070;
+      letter-spacing: 0.01em;
+    }
+
+    /* ── Intro / Problem ── */
+    .intro {
+      padding: 90px 0;
+      background: #ffffff;
+    }
+    .intro .container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+    .intro-text p {
+      font-family: 'Arial', sans-serif;
+      font-size: 16.5px;
+      color: #3a3a5a;
+      margin-bottom: 18px;
+      line-height: 1.75;
+    }
+    .intro-quote {
+      background: #1a1a2e;
+      border-radius: 8px;
+      padding: 40px;
+      color: #ffffff;
+    }
+    .intro-quote blockquote {
+      font-size: 20px;
+      line-height: 1.55;
+      font-style: italic;
+      color: #e8e0cc;
+      margin-bottom: 20px;
+    }
+    .intro-quote cite {
+      font-family: 'Arial', sans-serif;
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      color: #6b9a52;
+      font-style: normal;
+      text-transform: uppercase;
+    }
+
+    /* ── Features ── */
+    .features {
+      padding: 90px 0;
+      background: #f8f7f4;
+    }
+    .features-header { text-align: center; margin-bottom: 60px; }
+    .features-header .section-subtitle { margin: 0 auto; }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 28px;
+    }
+    .features-grid .feature-card {
+      grid-column: span 2;
+    }
+    .features-grid .feature-card:nth-child(4) {
+      grid-column: 2 / 4;
+    }
+    .features-grid .feature-card:nth-child(5) {
+      grid-column: 4 / 6;
+    }
+    .feature-card {
+      background: #ffffff;
+      border-radius: 8px;
+      padding: 36px 30px;
+      border-top: 3px solid #6b9a52;
+    }
+    .feature-icon {
+      font-size: 28px;
+      margin-bottom: 16px;
+    }
+    .feature-card h3 {
+      font-size: 19px;
+      font-weight: normal;
+      color: #1a1a2e;
+      margin-bottom: 12px;
+      line-height: 1.3;
+    }
+    .feature-card p {
+      font-family: 'Arial', sans-serif;
+      font-size: 15px;
+      color: #4a4a6a;
+      line-height: 1.7;
+    }
+
+    /* ── Export & Sync ── */
+    .export-sync {
+      padding: 80px 0;
+      background: #1a1a2e;
+      color: #ffffff;
+    }
+    .export-sync .container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+    .export-sync-text .section-label { color: #6b9a52; }
+    .export-sync-text .section-title { color: #ffffff; }
+    .export-sync-text p {
+      font-family: 'Arial', sans-serif;
+      font-size: 16px;
+      color: #8a90aa;
+      line-height: 1.75;
+      margin-bottom: 16px;
+    }
+    .export-features {
+      list-style: none;
+      margin-top: 24px;
+    }
+    .export-features li {
+      font-family: 'Arial', sans-serif;
+      font-size: 15px;
+      color: #c8cae0;
+      padding: 10px 0;
+      border-bottom: 1px solid #2a2a4e;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .export-features li:last-child { border-bottom: none; }
+    .export-features li::before {
+      content: '→';
+      color: #6b9a52;
+      flex-shrink: 0;
+    }
+    .export-visual {
+      background: #12122a;
+      border-radius: 8px;
+      padding: 32px;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      color: #6a90aa;
+      line-height: 1.9;
+      border: 1px solid #2a2a4e;
+    }
+    .export-visual .csv-header { color: #6b9a52; font-weight: bold; }
+    .export-visual .csv-row { color: #b0c8e0; }
+
+    /* ── Notify / CTA ── */
+    .notify {
+      padding: 100px 0;
+      background: #f8f7f4;
+      text-align: center;
+    }
+    .notify .section-subtitle { margin: 0 auto 48px; }
+    .notify-form {
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      max-width: 520px;
+      margin: 0 auto;
+      flex-wrap: wrap;
+    }
+    .notify-form input[type="email"] {
+      flex: 1;
+      min-width: 240px;
+      padding: 14px 20px;
+      font-family: 'Arial', sans-serif;
+      font-size: 15px;
+      color: #1a1a2e;
+      border: 2px solid #d0cec8;
+      border-right: none;
+      border-radius: 4px 0 0 4px;
+      outline: none;
+      background: #ffffff;
+      transition: border-color 0.2s;
+    }
+    .notify-form input[type="email"]:focus {
+      border-color: #6b9a52;
+    }
+    .notify-form input[type="email"]::placeholder {
+      color: #aaaacc;
+    }
+    .notify-form button {
+      padding: 14px 28px;
+      background: #6b9a52;
+      color: #ffffff;
+      border: none;
+      border-radius: 0 4px 4px 0;
+      font-family: 'Arial', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: 0.04em;
+      transition: opacity 0.2s;
+      white-space: nowrap;
+    }
+    .notify-form button:hover { opacity: 0.88; }
+    .notify-note {
+      margin-top: 16px;
+      font-family: 'Arial', sans-serif;
+      font-size: 13px;
+      color: #8a8aaa;
+    }
+    .notify-features {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin-top: 60px;
+      flex-wrap: wrap;
+    }
+    .notify-feature {
+      text-align: center;
+      max-width: 200px;
+    }
+    .notify-feature-icon {
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+    .notify-feature h4 {
+      font-size: 16px;
+      font-weight: normal;
+      color: #1a1a2e;
+      margin-bottom: 6px;
+    }
+    .notify-feature p {
+      font-family: 'Arial', sans-serif;
+      font-size: 13.5px;
+      color: #6a6a8a;
+      line-height: 1.6;
+    }
+
+    /* ── Footer ── */
+    footer {
+      background: #12122a;
+      padding: 48px 0 32px;
+      color: #6a6e88;
+      font-family: 'Arial', sans-serif;
+      font-size: 13px;
+    }
+    .footer-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 36px;
+      flex-wrap: wrap;
+      gap: 32px;
+    }
+    .footer-brand img { display: block; margin-bottom: 10px; }
+    .footer-brand p { font-size: 13px; color: #4a4a6a; max-width: 260px; line-height: 1.6; }
+    .footer-links h5 {
+      color: #8a90aa;
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .footer-links ul { list-style: none; }
+    .footer-links li { margin-bottom: 10px; }
+    .footer-links a { color: #4a4a6a; transition: color 0.2s; }
+    .footer-links a:hover { color: #6b9a52; }
+    .footer-bottom {
+      border-top: 1px solid #1e1e38;
+      padding-top: 24px;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .intro .container,
+      .export-sync .container { grid-template-columns: 1fr; gap: 40px; }
+      .features-grid { grid-template-columns: 1fr; }
+      .features-grid .feature-card,
+      .features-grid .feature-card:nth-child(4),
+      .features-grid .feature-card:nth-child(5) { grid-column: 1 / -1; }
+      .nav-links { display: none; }
+      .footer-top { flex-direction: column; }
+      .notify-form input[type="email"] { border-right: 2px solid #d0cec8; border-radius: 4px; margin-bottom: 10px; }
+      .notify-form button { border-radius: 4px; width: 100%; }
+      .notify-features { gap: 28px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Navigation ── -->
+  <nav>
+    <div class="container">
+      <a href="#" class="nav-logo-img">
+        <img src="logo.png" alt="Settlemates" style="height:44px;width:auto;display:block;" />
+      </a>
+      <ul class="nav-links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#notify">Get Notified</a></li>
+        <li class="nav-cta"><a href="#notify" class="btn btn-primary">Notify Me</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ── Hero ── -->
+  <section class="hero">
+    <div class="container">
+      <div class="coming-soon-badge">&#9679; Launching Soon</div>
+      <p class="hero-eyebrow">For Mediators and Lawyers</p>
+      <h1>Negotiation Math,<br><em>Fast.</em></h1>
+      <p class="hero-sub">
+        Settlemates calculates midpoints, creates brackets, and reveals percentage movements
+        in seconds — so you can focus on strategy, not arithmetic. Settlemates tracks all
+        your negotiations in one place and allows you to keep notes about the case and the
+        negotiation. Use your data from settlement negotiations to improve your strategies and skills.
+      </p>
+      <div class="hero-cta">
+        <a href="#notify" class="btn btn-primary">Notify Me at Launch</a>
+        <a href="#features" class="btn btn-outline">See the Features</a>
+      </div>
+      <p class="hero-note">Free to try &middot; No credit card required at launch</p>
+    </div>
+  </section>
+
+  <!-- ── Proof Bar ── -->
+  <div class="proof-bar">
+    <div class="container">
+      Built for litigation attorneys, mediators, and anyone who negotiates settlements &mdash;
+      from single-attorney practices to full-service litigation firms.
+    </div>
+  </div>
+
+  <!-- ── Intro / Problem ── -->
+  <section class="intro">
+    <div class="container">
+      <div class="intro-text">
+        <p class="section-label">The Problem</p>
+        <h2 class="section-title">Negotiations move fast.</h2>
+        <p>
+          Calculating midpoints and creating brackets might not be difficult
+          math, but it slows you down.
+        </p>
+        <p>
+          You're in a mediation session. A plaintiff has demanded $850,000.
+          The defendant has offered $175,000. Settlemates was built to handle
+          all the math you do during settlement negotiations, so you never have
+          to reach for a calculator or scribble figures on a legal pad again.
+          Every number you need is one tap away. And you'll never lose track of
+          negotiation histories again because you'll store it all in one place.
+        </p>
+        <a href="#notify" class="btn btn-primary" style="margin-top:8px;">Get Notified at Launch</a>
+      </div>
+      <div class="intro-quote">
+        <blockquote>
+          "The midpoint is often where negotiations begin to converge —
+          tracking it throughout the negotiation changes how you negotiate."
+        </blockquote>
+        <cite>The Settlemates Approach</cite>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Features ── -->
+  <section class="features" id="features">
+    <div class="container">
+      <div class="features-header">
+        <p class="section-label">Features</p>
+        <h2 class="section-title">Everything you need at the table</h2>
+        <p class="section-subtitle">
+          Settlemates gives mediators and lawyers an instant command of the numbers
+          that drive settlement — without spreadsheets, without guesswork.
+        </p>
+      </div>
+      <div class="features-grid">
+
+        <div class="feature-card">
+          <div class="feature-icon">⚖️</div>
+          <h3>Midpoints &amp; Secondary Midpoints</h3>
+          <p>
+            Enter plaintiff's demand and a defendant's counter-offer. Settlemates
+            instantly calculates the midpoint between them. It also calculates
+            the secondary midpoints — the midpoints between the midpoints —
+            giving you the full picture of where a deal might land.
+            As each party moves, track the midpoints.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">📐</div>
+          <h3>Bracket Display &amp; Analysis</h3>
+          <p>
+            When a party proposes a bracket — for example, "Defendant will
+            move to $100,000 if Plaintiff lowers the demand to $400,000" —
+            Settlemates displays it clearly as a bracket, and calculates the
+            midpoint of that bracket, so you can evaluate the proposal on the spot.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🔄</div>
+          <h3>Reverse Bracket Builder</h3>
+          <p>
+            Have a target midpoint in mind? Work backwards. Settlemates
+            lets you set a desired midpoint and then adjust the defendant's
+            offer or plaintiff's demand to build a bracket that achieves
+            exactly the result you're looking for — a powerful tool
+            for crafting counter-proposals.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">📊</div>
+          <h3>Percentage Tracking</h3>
+          <p>
+            Track the percentage increase or decrease between a plaintiff's
+            successive demands or a defendant's successive offers. Understand
+            at a glance how much each side has moved from their starting position
+            to keep negotiations in perspective and your arguments sharp.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">📁</div>
+          <h3>CSV Export</h3>
+          <p>
+            Export your full session — demands, offers, midpoints, brackets,
+            and percentages — to a CSV file with one tap. Use it to document
+            a negotiation for your file, share with a client, or analyze
+            the history of a settlement posture over time.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Export & Sync Callout ── -->
+  <section class="export-sync">
+    <div class="container">
+      <div class="export-sync-text">
+        <p class="section-label">Export</p>
+        <h2 class="section-title" style="color:#ffffff;">Your data, your way.</h2>
+        <p>
+          Every session you run in Settlemates belongs to you. Export
+          a clean, structured CSV to attach to your file, share with
+          co-counsel, or present to a client showing exactly how
+          the negotiation unfolded.
+        </p>
+        <ul class="export-features">
+          <li>Export demands, offers, midpoints, and brackets to CSV</li>
+          <li>One-tap export — no setup, no formatting required</li>
+          <li>Session history preserved and searchable</li>
+        </ul>
+      </div>
+      <div class="export-visual">
+        <div class="csv-header">Date,Party,Amount,Type,Midpoint</div>
+        <div class="csv-row">04/15/2026,Plaintiff,$850,000,Demand,—</div>
+        <div class="csv-row">04/15/2026,Defendant,$175,000,Offer,—</div>
+        <div class="csv-row">04/15/2026,—,—,Midpoint,$512,500</div>
+        <div class="csv-row">04/15/2026,—,—,2nd Midpoint (P),$681,250</div>
+        <div class="csv-row">04/15/2026,—,—,2nd Midpoint (D),$343,750</div>
+        <div class="csv-row">04/15/2026,Plaintiff,$750,000,Demand,—</div>
+        <div class="csv-row">04/15/2026,—,—,Chg (Plaintiff),−11.8%</div>
+        <div class="csv-row" style="color:#5a7a9a;">...</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Notify / Email Capture ── -->
+  <section class="notify" id="notify">
+    <div class="container">
+      <p class="section-label">Coming Soon</p>
+      <h2 class="section-title">Be the first to know.</h2>
+      <p class="section-subtitle">
+        Settlemates is launching soon. Enter your email and we'll notify you
+        the moment it's available — including early access and launch pricing.
+      </p>
+
+      <form class="notify-form" action="#" method="post">
+        <input type="email" name="email" placeholder="Your email address" required />
+        <button type="submit">Notify Me</button>
+      </form>
+      <p class="notify-note">No spam. One email when we launch. Unsubscribe any time.</p>
+
+      <div class="notify-features">
+        <div class="notify-feature">
+          <div class="notify-feature-icon">🆓</div>
+          <h4>Free to Start</h4>
+          <p>Try Settlemates at no cost from day one — no credit card required.</p>
+        </div>
+        <div class="notify-feature">
+          <div class="notify-feature-icon">⚡</div>
+          <h4>Instant Access</h4>
+          <p>No setup, no training. Open the app and start calculating immediately.</p>
+        </div>
+        <div class="notify-feature">
+          <div class="notify-feature-icon">🔒</div>
+          <h4>Your Data, Private</h4>
+          <p>Settlement figures stay on your device — never shared, never exposed.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Footer ── -->
+  <footer>
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img src="logo.png" alt="Settlemates" style="height:48px;width:auto;display:block;margin-bottom:10px;" />
+          <p>Settlement math for mediators, lawyers, and anyone who negotiates.</p>
+        </div>
+        <div class="footer-links">
+          <h5>Product</h5>
+          <ul>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#notify">Get Notified</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h5>Company</h5>
+          <ul>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h5>Legal</h5>
+          <ul>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2026 Settlemates. All rights reserved.</span>
+        <span>hello@settlemates.com</span>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
